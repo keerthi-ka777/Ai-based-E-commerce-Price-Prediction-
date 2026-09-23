@@ -1,0 +1,9 @@
+Flask>=3.1,<4
+Flask-Cors>=6,<7
+requests>=2.32,<3
+scikit-learn>=1.5,<2
+joblib>=1.4,<2
+numpy>=2.0,<3
+Pillow>=10,<12
+python-dotenv>=1.0,<2
+google-genai>=2.0,<3
