@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI-Based E-Commerce Price Prediction</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+<header class="hero">
+  <div><h1>AI-Based E-Commerce Price Prediction</h1><p>Dynamic pricing, product discovery, market signals and personal styling</p></div>
+  <button class="nav-btn" onclick="scrollToSection('dashboard')">Dashboard</button>
+</header>
+
+<main class="container">
+<section id="dashboard">
+  <div class="search-wrap">
+    <div class="search-box">
+      <span class="search-icon">⌕</span>
+      <input id="search" type="search" placeholder="Search product">
+      <button class="search-btn" onclick="searchProducts()">Search</button>
+      <button class="clear-btn" onclick="clearSearch()">×</button>
+    </div>
+    <span id="liveStatus">● Connecting to live data...</span>
+  </div>
+
+  <div class="location-bar">
+    <div class="location-main">
+      <span class="location-pin">⌖</span>
+      <div><strong id="locationText">Location not set</strong><small id="locationSubtext">Use your location for local weather and shopping context.</small></div>
+    </div>
+    <div class="location-actions">
+      <button class="secondary" onclick="useMyLocation()">Use my location</button>
+      <input id="locationCity" placeholder="Or enter city / PIN code" onkeydown="if(event.key==='Enter')setManualLocation()">
+      <button class="secondary" onclick="setManualLocation()">Set</button>
+    </div>
+  </div>
+
+  <section id="searchResults" class="search-results hidden"></section>
+
+  <section id="weatherRecommendations" class="weather-recommendations card hidden">
+    <div class="weather-rec-head"><div><h2 id="weatherRecTitle">Weather-aware recommendations</h2><p id="weatherRecReason" class="muted"></p></div><span id="weatherRecTemp" class="weather-temp"></span></div>
+    <div id="weatherRecGrid" class="weather-rec-grid"></div>
+  </section>
+
+  <div class="metrics compact-metrics">
+    <div class="metric"><span>Live Demand</span><strong id="demandMetric">--%</strong></div>
+    <div class="metric"><span>Popularity Proxy</span><strong id="popularityMetric">--%</strong></div>
+    <div class="metric"><span>Social Trend</span><strong id="trendMetric">--%</strong></div>
+    <div class="metric"><span>Return-Risk Proxy</span><strong id="returnMetric">--%</strong></div>
+  </div>
+
+  <div class="grid-2 prediction-layout">
+    <section class="card prediction-card">
+      <div class="section-heading"><div><h2>AI Price Prediction</h2><p class="muted">Random Forest uses the live offer and automatically derived market signals.</p></div><span class="auto-badge">AUTO-FILLED</span></div>
+      <div class="selected-offer" id="selectedOffer"><div><span>Selected live offer</span><h3>Search a product first</h3><p>Choose any live seller offer from the search results.</p></div></div>
+      <div class="signal-strip" id="signalStrip">
+        <div><span>Market price</span><b id="marketPriceSignal">--</b></div><div><span>Competitor</span><b id="competitorSignal">--</b></div><div><span>Rating</span><b id="ratingSignal">--</b></div><div><span>Discount</span><b id="discountSignal">--</b></div>
+      </div>
+      <details class="advanced-controls"><summary>Advanced controls (optional)</summary>
+        <div class="form-grid">
+          <label>Customer Loyalty<select id="loyalty"><option value="new">New</option><option value="silver">Silver</option><option value="gold">Gold</option><option value="platinum">Platinum</option></select></label>
+          <label>Upcoming Sale<select id="saleEvent"><option value="normal">Normal</option><option value="flash sale">Flash Sale</option><option value="diwali">Diwali</option><option value="summer sale">Summer Sale</option><option value="new year">New Year</option></select></label>
+        </div>
+        <p class="muted tiny">You normally do not need to change these. The app derives price, competitor, rating, demand, popularity, social trend and weather signals from the current search context.</p>
+      </details>
+      <button class="primary" id="predictButton" onclick="predictPrice()" disabled>Predict AI Price</button>
+      <div class="prediction-explainer"><b>How it works:</b> Live seller price + market comparison + rating/review popularity + social trend + current weather → Random Forest → modeled price recommendation.</div>
+    </section>
+
+    <aside class="card ai-card">
+      <div class="section-heading"><div><h2>AI Recommendation</h2><p class="muted">This section updates automatically after every product search.</p></div></div>
+      <div class="best-value" id="bestValue"><div><span>AI Best Value</span><h3>Search for a product</h3><p>We'll compare the current live offers.</p></div></div>
+      <div class="value-grid" id="valueGrid"></div>
+      <div class="prediction-box"><span>Modeled Price Recommendation</span><strong id="predictedPrice">₹ --</strong><p id="strategy">Select a live offer and run the prediction.</p></div>
+      <div class="insight"><h3>Demand Spike Detector</h3><p id="spikeText">Waiting for live market signals...</p></div>
+      <div class="insight"><h3>Competitor Monitoring</h3><p id="competitorText">Search for a product to compare current offers.</p></div>
+      <div class="insight"><h3>Weather Pricing</h3><p id="weatherText">Fetching current weather...</p></div>
+    </aside>
+  </div>
+
+<div class="grid-2">
+  <section class="card"><h2>Customer Emotion Analysis</h2><div class="chips"><button onclick="setReview('Excellent quality and delivery was fast')">Excellent</button><button onclick="setReview('Good product and comfortable')">Good</button><button onclick="setReview('Average product, delivery was okay')">Average</button><button onclick="setReview('Poor quality and delivery was late')">Poor</button></div><textarea id="review" placeholder="Enter a customer review...">Quality is excellent and delivery was fast</textarea><button class="primary" onclick="analyzeReview()">Analyze Review</button><div class="result"><h3>Sentiment Result</h3><p id="sentimentResult">No review analyzed yet.</p></div></section>
+  <section class="card"><h2>Bundle Optimization</h2><p class="muted">Choose a live shopping context. Bundle candidates come from current shopping results, not the demo database.</p><div class="form-grid"><label>Bundle Context<select id="bundleContext" onchange="loadBundleOptions()"><option value="current">Current Search</option><option value="beauty">Beauty & Personal Care</option><option value="fashion">Fashion</option><option value="electronics">Electronics</option><option value="home">Home & Appliances</option><option value="grocery">Grocery</option><option value="sports">Sports & Fitness</option><option value="travel">Travel</option><option value="summer">Summer / Heat</option></select></label></div><div id="bundleList" class="bundle-list"></div><button class="primary" onclick="optimizeBundle()">Optimize Live Bundle</button><div class="result"><h3>Recommended Bundle</h3><p id="bundleResult">Choose at least two live products.</p></div></section>
+</div>
+
+<div class="grid-2">
+  <section class="card"><h2>Personal Stylist</h2><div class="form-grid"><label>User Type<select id="userType"><option>Women</option><option>Men</option><option>Unisex</option></select></label><label>Outfit Type<select id="outfitType"><option>Dress</option><option>Top</option><option>Shirt</option><option>Shoes</option><option>Casual</option><option>Formal</option><option>Ethnic</option><option>Sports</option></select></label><label>Season<select id="season"><option>Summer</option><option>Winter</option><option>Monsoon</option><option>Spring</option></select></label><label>Loyalty<select id="stylistLoyalty"><option>New</option><option>Silver</option><option>Gold</option><option>Platinum</option></select></label></div><button class="primary" onclick="getStylist()">Get Suggestions</button><div class="result" id="stylistResult">Choose preferences to get recommendations.</div></section>
+
+  <section class="card tryon-card"><div class="section-heading"><div><h2>Virtual Try-On</h2><p class="muted">Upload your photo, select a live wearable product, then generate a realistic try-on image.</p></div><span class="auto-badge">3 STEPS</span></div><div class="tryon-steps"><div class="tryon-step"><div class="step-number">1</div><h3>Your photo</h3><div class="upload"><input id="photo" type="file" accept="image/*"><p class="tiny">Use a clear full-body or three-quarter photo for better results.</p></div><img id="photoPreview" class="tryon-photo-preview hidden" alt="Your photo preview"></div><div class="tryon-step"><div class="step-number">2</div><h3>Pick outfit</h3><label>Search wearable product<input id="tryOnSearch" type="search" placeholder="Search dresses, sarees, shirts, shoes..." oninput="filterTryOn()"></label><label>Choose live product<select id="tryOnOutfit"></select></label><div id="tryOnPreview" class="tryon-preview"></div></div><div class="tryon-step"><div class="step-number">3</div><h3>Result</h3><div id="tryOnResult" class="tryon-result"><span>Your generated try-on will appear here.</span></div><button class="primary" onclick="tryOn()">Generate Try-On ✨</button><a id="tryOnDownload" class="secondary hidden" download="virtual-try-on.png">Download image</a></div></div><p class="tiny muted">The generation uses your uploaded photo plus the selected product image. A Gemini image-generation API key is required for the real rendered result.</p></section>
+</div>
+
+</main>
+<footer>AI-Based E-Commerce Price Prediction • Flask • SQLite • Random Forest • Live Shopping + Weather APIs</footer>
+<script src="/static/js/app.js"></script>
+</body>
+</html>
