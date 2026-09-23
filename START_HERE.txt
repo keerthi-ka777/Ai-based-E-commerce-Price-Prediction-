@@ -1,0 +1,32 @@
+AI E-COMMERCE PRICE PREDICTION — CURRENT VERSION
+
+1. Open this folder in VS Code.
+2. Open Terminal in this folder.
+3. Activate venv:
+   venv\Scripts\activate
+4. Install packages:
+   python -m pip install -r requirements.txt
+5. Create .env:
+   Copy-Item .env.example .env
+6. Put your SerpApi key in .env:
+   SERPAPI_KEY=your_key_here
+7. Start:
+   python app.py
+8. Open:
+   http://127.0.0.1:5000
+
+LIVE SHOPPING
+--------------
+Search results, bundle options, Best Value, stylist matches and wearable products use the configured shopping provider. No DummyJSON/demo product catalog is used.
+
+LOCATION + WEATHER
+------------------
+Use 'Use my location' or enter a city/PIN. Current weather is fetched from Open-Meteo. Weather-aware shopping recommendations update from temperature, rain and humidity.
+
+VIRTUAL TRY-ON
+--------------
+Only wearable products are accepted into the try-on list. Laptops, phones, appliances, food and personal-care products are excluded. The upload workflow is ready for a dedicated garment-transfer model.
+
+RANDOM FOREST
+-------------
+The price prediction model remains models/price_model.joblib.
